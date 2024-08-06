@@ -16,7 +16,8 @@ BEGIN
                 FROM information_schema.columns
                 WHERE table_schema = DATABASE() AND table_name ='organization' AND column_name = 'supervisor'
         ) THEN
-                ALTER TABLE `organization` ADD `supervisor` INT NULL DEFAULT NULL COMMENT 'this user will receive a copy of accepted and rejected leave requests';
+                ADD `supervisors` VARCHAR(255) NULL DEFAULT NULL 
+                COMMENT 'Comma-separated list of supervisor IDs'
         END IF;
 END$$
 DELIMITER ;

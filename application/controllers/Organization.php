@@ -130,6 +130,7 @@ class Organization extends CI_Controller {
      * takes parameters by GET
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
+     
     public function copy() {
         header("Content-Type: application/json");
         setUserContext($this);
@@ -173,7 +174,38 @@ class Organization extends CI_Controller {
             ->set_content_type('application/json')
             ->set_output(json_encode($msg));
     }
+     /**
+     * Ajax endpoint: Returns the list of the SUPERVISORS added to an entity
+     * Prints the table content in a JSON format expected by jQuery Datatable
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function supervisors() {
+        setUserContext($this);
+        $id = $this->input->get('id', TRUE);
+        $this->load->model('organization_model');
     
+        $supervisors = $this->organization_model->getsupervisors($id);
+    
+        $msg = new \stdClass();
+        $msg->draw = 1;
+        $msg->recordsTotal = count($supervisors);
+        $msg->recordsFiltered = count($supervisors);
+        $msg->data = array();
+    //supervisors is an array of associative array
+        foreach ($supervisors as $supervisor) {
+            $row = new \stdClass();
+            $row->id = isset($supervisor['id']) ? $supervisor['id'] : null;
+            $row->firstname = isset($supervisor['firstname']) ? $supervisor['firstname'] : null;
+            $row->lastname = isset($supervisor['lastname']) ? $supervisor['lastname'] : null;
+         
+            $msg->data[] = $row;
+        }
+    
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($msg));
+    }
+       
     /**
      * Ajax endpoint: Add an employee to an entity of the organization
      * takes parameters by GET
@@ -192,12 +224,12 @@ class Organization extends CI_Controller {
         }
     }
 
+
     /**
      * Ajax endpoint: Add an employee to an entity of the organization
      * takes parameters by GET
      * @author Benjamin BALET <benjamin.balet@gmail.com>
-     */
-    public function delemployee() {
+     */    public function delemployee() {
         header("Content-Type: application/json");
         setUserContext($this);
         if ($this->auth->isAllowed('edit_organization') == FALSE) {
@@ -208,6 +240,41 @@ class Organization extends CI_Controller {
             echo json_encode($this->organization_model->detachEmployee($id));
         }
     }
+   /**
+ * Ajax endpoint: Add a supervisor to an entity of the organization
+ * takes parameters by GET
+ * @author Benjamin BALET <benjamin.balet@gmail.com>
+ */
+public function addsupervisor() {
+    header("Content-Type: application/json");
+    setUserContext($this);
+    if ($this->auth->isAllowed('edit_organization') == FALSE) {
+        $this->output->set_header("HTTP/1.1 403 Forbidden");
+    } else {
+        $userId = $this->input->get('user', TRUE);
+        $entityId = $this->input->get('entity', TRUE);
+        $this->load->model('organization_model');
+        echo json_encode($this->organization_model->addSupervisor($userId, $entityId));
+    }
+}
+ 
+
+/**
+ * Ajax endpoint: Remove a supervisor from an entity of the organization
+ * takes parameters by GET
+ * @author Benjamin BALET <benjamin.balet@gmail.com>
+ */
+public function delsupervisor() {
+    header("Content-Type: application/json");
+    setUserContext($this);
+    if ($this->auth->isAllowed('edit_organization') == FALSE) {
+        $this->output->set_header("HTTP/1.1 403 Forbidden");
+    } else {
+        $entityId = $this->input->get('entity', TRUE);
+        $this->load->model('organization_model');
+        echo json_encode($this->organization_model->removeSupervisor($this->input->get('user'), $entityId));
+    }
+}
 
     /**
      * Ajax endpoint: Cascade delete children and set employees' org to NULL
@@ -239,7 +306,7 @@ class Organization extends CI_Controller {
             setUserContext($this);
             $this->auth->checkIfOperationIsAllowed('organization_select');
         }
-
+    
         $id = $this->input->get('id', TRUE);
         if ($id == "#") {
             unset($id);
@@ -263,43 +330,23 @@ class Organization extends CI_Controller {
     }
 
     /**
-     * Ajax endpoint:Returns the supervisor of an entity of the organization
+     * Ajax endpoint:Returns the supervisors of an entity of the organization
      * (string containing an id)
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function getsupervisor() {
+    public function getsupervisors() {
         header("Content-Type: application/json");
         setUserContext($this);
         $entity = $this->input->get('entity', TRUE);
         if (isset($entity)) {
             $this->load->model('organization_model');
-            echo json_encode($this->organization_model->getSupervisor($entity));
+            echo json_encode($this->organization_model->getsupervisors($entity));
         } else {
             $this->output->set_header("HTTP/1.1 422 Unprocessable entity");
         }
     }
 
-    /**
-     * Ajax endpoint: Select the supervisor of an entity of the organization
-     * takes parameters by GET
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
-     */
-    public function setsupervisor() {
-        header("Content-Type: application/json");
-        setUserContext($this);
-        if ($this->auth->isAllowed('edit_organization') == FALSE) {
-            $this->output->set_header("HTTP/1.1 403 Forbidden");
-        } else {
-            if ($this->input->get('user', TRUE) == "") {
-                $id = NULL;
-            } else {
-                $id = $this->input->get('user', TRUE);
-            }
-            $entity = $this->input->get('entity', TRUE);
-            $this->load->model('organization_model');
-            echo json_encode($this->organization_model->setSupervisor($id, $entity));
-        }
-    }
+
 
     /**
      * Modal form allowing to create and manage custom lists of employees

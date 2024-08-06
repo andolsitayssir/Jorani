@@ -218,6 +218,36 @@ class Organization_model extends CI_Model {
         $this->db->order_by('firstname', 'asc');
         return $this->db->get();
     }
+     /** 
+     * Returns the list of the supervisors of the  entity
+     * @param int $id identifier of the entity
+     * @return array Result of the query
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+public function getsupervisors($entityid){
+           // Get the supervisors from the organization table
+           $this->db->select('supervisors');
+           $this->db->from('organization');
+           $this->db->where('id', $entityid);
+           $query = $this->db->get();
+           $result = $query->row();
+           
+           if (!$result || empty($result->supervisors)) {
+               return [];
+           }
+   
+           // Get supervisor IDs as an array
+           $supervisor_ids = explode(',', $result->supervisors);
+   
+           // Query the users table to get the details of the supervisors
+           $this->db->select('id, firstname, lastname');
+           $this->db->from('users');
+           $this->db->where_in('id', $supervisor_ids);
+           $this->db->order_by('lastname', 'asc');
+           $this->db->order_by('firstname', 'asc');
+           $query= $this->db->get();
+           return $query->result_array();
+}
 
     /**
      * Returns the list of the employees attached to an entity
@@ -257,36 +287,66 @@ class Organization_model extends CI_Model {
     }
 
     /**
-     * Add an employee into an entity of the organization
+     * Add a supervisor to an entity of the organization
      * @param int $id identifier of the employee
      * @param int $entity identifier of the entity
      * @return int result of the query
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function setSupervisor($id, $entity) {
+    public function addSupervisor($id, $entity) {
+        //fetch current supervisors
+        $this->db->select('supervisors');
+        $this->db->from('organization');
+        $this->db->where('id',$entity);
+        $result=$this->db->get()->row_array();
+
+        //initialise the empty list to an empty array
+        if (empty($result['supervisors'])) {
+            $supervisors = [];
+        } else {
+            $supervisors = explode(',', $result['supervisors']);
+        }
+        
+  // Add new supervisor if not already in the array
+  if (!in_array($id, $supervisors)) {
+      $supervisors[] = $id;
+  }
+          // Convert array back to comma-separated string
         $data = array(
-            'supervisor' => $id
+            'supervisors' => implode(',', $supervisors)
         );
+
         $this->db->where('id', $entity);
         return $this->db->update('organization', $data);
-    }
 
-    /**
-     * Returns the supervisor of an entity
-     * @param int $entity identifier of the entity
-     * @return object identifier of supervisor
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
-     */
-    public function getSupervisor($entity) {
-        $this->db->select('users.id, CONCAT(users.firstname, \' \', users.lastname) as username, email', FALSE);
-        $this->db->from('organization');
-        $this->db->join('users', 'users.id = organization.supervisor');
-        $this->db->where('organization.id', $entity);
-        $result = $this->db->get()->result();
-        if (count($result) > 0) {
-            return $result[0];
-        } else {
-            return NULL;
-        }
     }
+     
+/**
+ * Remove a supervisor from an entity of the organization
+ * @param int $id identifier of the supervisor
+ * @param int $entity identifier of the entity
+ * @return bool result of the query
+ */
+public function removeSupervisor($id, $entity) {
+    // Fetch current supervisors
+    $this->db->select('supervisors');
+    $this->db->from('organization');
+    $this->db->where('id', $entity);
+    $result = $this->db->get()->row_array();
+    
+    // Get current supervisors as an array
+    $supervisors = explode(',', $result['supervisors']);
+    
+    // Remove the supervisor if it exists in the array
+    if (($key = array_search($id, $supervisors)) !== false) {
+        unset($supervisors[$key]);
+    }
+    
+    // Convert array back to comma-separated string
+    $data = array(
+        'supervisors' => implode(',', $supervisors)
+    );
+    $this->db->where('id', $entity);
+    return $this->db->update('organization', $data);
+}
 }
