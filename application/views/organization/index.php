@@ -159,6 +159,7 @@
         { data: "id" },
         { data: "firstname" },
         { data: "lastname" },
+        {data:'email'},
         { 
             data: null,
             "render": function(data, type, row) {

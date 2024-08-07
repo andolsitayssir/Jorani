@@ -240,7 +240,7 @@ public function getsupervisors($entityid){
            $supervisor_ids = explode(',', $result->supervisors);
    
            // Query the users table to get the details of the supervisors
-           $this->db->select('id, firstname, lastname');
+           $this->db->select('id, firstname, lastname,email');
            $this->db->from('users');
            $this->db->where_in('id', $supervisor_ids);
            $this->db->order_by('lastname', 'asc');

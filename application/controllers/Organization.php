@@ -197,7 +197,7 @@ class Organization extends CI_Controller {
             $row->id = isset($supervisor['id']) ? $supervisor['id'] : null;
             $row->firstname = isset($supervisor['firstname']) ? $supervisor['firstname'] : null;
             $row->lastname = isset($supervisor['lastname']) ? $supervisor['lastname'] : null;
-         
+            $row->email = isset($supervisor['email']) ? $supervisor['email'] : null;
             $msg->data[] = $row;
         }
     
