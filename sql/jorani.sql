@@ -264,6 +264,47 @@ CREATE TABLE IF NOT EXISTS `leaves` (
   KEY `status` (`status`),
   KEY `employee` (`employee`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Leave requests' AUTO_INCREMENT=1 ;
+--
+-- Structure of table `status`
+--
+CREATE TABLE IF NOT EXISTS `status` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Status of the Leave Request (system table)';
+
+--
+-- Content of table `status`
+--
+INSERT INTO `status` (`id`, `name`) VALUES
+(1, 'Planned'),
+(2, 'Requested'),
+(3, 'Accepted'),
+(4, 'Rejected'),
+(5, 'Cancellation'),
+(6, 'Canceled');
+
+--
+-- Structure of table `types`
+--
+CREATE TABLE IF NOT EXISTS `types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier of the type',
+  `name` varchar(128) NOT NULL COMMENT 'Name of the leave type',
+  `acronym` VARCHAR(10) NULL DEFAULT NULL COMMENT 'Acronym of the leave type',
+  `deduct_days_off` BOOL NOT NULL DEFAULT 0 COMMENT 'Deduct days off when computing the balance of the leave type',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='List of leave types (LoV table)' AUTO_INCREMENT=6 ;
+
+--
+-- Content of table `types`
+--
+INSERT INTO `types` (`id`, `name`) VALUES
+(0, 'compensate'),
+(1, 'paid leave'),
+(2, 'maternity leave'),
+(3, 'paternity leave'),
+(4, 'special leave'),
+(5, 'Sick leave');
 
 --
 -- Structure of table `organization`
@@ -330,47 +371,6 @@ INSERT INTO `roles` (`id`, `name`) VALUES
 (2, 'user'),
 (8, 'HR admin');
 
---
--- Structure of table `status`
---
-CREATE TABLE IF NOT EXISTS `status` (
-  `id` int(11) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Status of the Leave Request (system table)';
-
---
--- Content of table `status`
---
-INSERT INTO `status` (`id`, `name`) VALUES
-(1, 'Planned'),
-(2, 'Requested'),
-(3, 'Accepted'),
-(4, 'Rejected'),
-(5, 'Cancellation'),
-(6, 'Canceled');
-
---
--- Structure of table `types`
---
-CREATE TABLE IF NOT EXISTS `types` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier of the type',
-  `name` varchar(128) NOT NULL COMMENT 'Name of the leave type',
-  `acronym` VARCHAR(10) NULL DEFAULT NULL COMMENT 'Acronym of the leave type',
-  `deduct_days_off` BOOL NOT NULL DEFAULT 0 COMMENT 'Deduct days off when computing the balance of the leave type',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='List of leave types (LoV table)' AUTO_INCREMENT=6 ;
-
---
--- Content of table `types`
---
-INSERT INTO `types` (`id`, `name`) VALUES
-(0, 'compensate'),
-(1, 'paid leave'),
-(2, 'maternity leave'),
-(3, 'paternity leave'),
-(4, 'special leave'),
-(5, 'Sick leave');
 
 --
 -- Structure of table `users`

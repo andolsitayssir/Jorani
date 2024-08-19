@@ -79,11 +79,50 @@ function getLeaveInfos(preventDefault) {
             if (typeof leaveInfo.credit !== 'undefined') {
                 var credit = parseFloat(leaveInfo.credit);
                 var duration = parseFloat($("#duration").val());
+
+
                 if (duration > credit) {
                     $("#lblCreditAlert").show();
+                    $("#requestBtn").prop("disabled", true);
+                    $("#requestBtn").css({
+                        "opacity": "0.4",
+                        "pointer-events": "none",
+                         
+                    });
+                    $("#plannedBtn").prop("disabled", true);
+                    $("#plannedBtn").css({
+                        "opacity": "0.4",  
+                        "pointer-events": "none",
+                       
+                    });
+                    $("#updateBtn").prop("disabled", true);
+                    $("#updateBtn").css({
+                        "opacity": "0.4",  
+                        "pointer-events": "none",
+                       
+                    });
                 } else {
                     $("#lblCreditAlert").hide();
+                    $("#requestBtn").prop("disabled", false);
+                    $("#requestBtn").css({
+                        "opacity": "1",
+                        "pointer-events": "auto",
+                        "border": ""  
+                    });
+                    $("#plannedBtn").prop("disabled", false);
+                    $("#plannedBtn").css({
+                        "opacity": "1",
+                        "pointer-events": "auto",
+                        
+                    });
+                    $("#updateBtn").prop("disabled", false);
+                    $("#updateBtn").css({
+                        "opacity": "1",  
+                        "pointer-events": "auto",
+                       
+                    });
                 }
+                
                 if (leaveInfo.credit != null) {
                     $("#lblCredit").text('(' + leaveInfo.credit + ')');
                 }

@@ -78,7 +78,7 @@ echo form_open($form_action, $attributes) ?>
         <option value="6"><?php echo lang('Canceled');?></option>
     </select><br />
 
-    <button type="submit" class="btn btn-primary"><i class="mdi mdi-check"></i>&nbsp; <?php echo lang('hr_leaves_create_button_create');?></button>
+    <button type="submit"  class="btn btn-primary"><i class="mdi mdi-check"></i>&nbsp; <?php echo lang('hr_leaves_create_button_create');?></button>
     &nbsp;
     <a href="<?php echo base_url() . $source; ?>" class="btn btn-danger"><i class="mdi mdi-close"></i>&nbsp; <?php echo lang('hr_leaves_create_button_cancel');?></a>
 </form>

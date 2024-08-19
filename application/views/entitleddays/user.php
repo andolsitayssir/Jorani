@@ -7,7 +7,7 @@
  * @since         0.2.0
  */
 ?>
-
+hello
 <div class="row-fluid">
     <div class="span12">
 

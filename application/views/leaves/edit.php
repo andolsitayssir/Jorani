@@ -103,13 +103,13 @@ if (isset($_GET['source'])) {
     <br/>
     <button name="status" value="1" type="submit" class="btn btn-primary"><i class="mdi mdi-calendar-question" aria-hidden="true"></i>&nbsp; <?php echo lang('Planned');?></button>
     &nbsp;&nbsp;
-    <button name="status" value="2" type="submit" class="btn btn-primary "><i class="mdi mdi-check"></i>&nbsp; <?php echo lang('Requested');?></button>
+    <button name="status" value="2" type="submit"  class="btn btn-primary "><i class="mdi mdi-check"></i>&nbsp; <?php echo lang('Requested');?></button>
     <br/>
     <?php } ?>
     <br />
 
     <?php if ($is_hr) {?>
-    <button type="submit" class="btn btn-primary"><i class="mdi mdi-check"></i>&nbsp;<?php echo lang('leaves_edit_button_update');?></button>&nbsp;
+    <button type="submit" id="updateBtn" class="btn btn-primary"><i class="mdi mdi-check"></i>&nbsp;<?php echo lang('leaves_edit_button_update');?></button>&nbsp;
     <?php } ?>
 
     <?php if (isset($_GET['source'])) {?>
@@ -200,6 +200,7 @@ $(document).on("click", "#showNoneWorkedDay", function(e) {
   showListDayOffHTML();
 });
 </script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/lms/leave.edit-0.7.0.js" type="text/javascript"></script>
 <script type="text/javascript">
     var baseURL = '<?php echo base_url();?>';
     var userId = <?php echo $leave['employee']; ?>;
@@ -281,4 +282,4 @@ $(function () {
 });
 
 </script>
-<script type="text/javascript" src="<?php echo base_url();?>assets/js/lms/leave.edit-0.7.0.js" type="text/javascript"></script>
+
