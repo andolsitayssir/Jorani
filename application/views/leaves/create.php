@@ -14,11 +14,11 @@
     <div class="span8">
 
 <?php echo validation_errors(); ?>
-<!--form-->
+
 <?php
 $attributes = array('id' => 'frmLeaveForm');
 echo form_open('leaves/create', $attributes) ?>
-<!--select the type of a leave-->
+
     <label for="type">
         <?php echo lang('leaves_create_field_type');?>
         &nbsp;<span class="muted" id="lblCredit"><?php if (!is_null($credit)) { ?>(<?php echo $credit; ?>)<?php } ?></span>
@@ -28,7 +28,7 @@ echo form_open('leaves/create', $attributes) ?>
         <option value="<?php echo $typeId; ?>" <?php if ($typeId == $defaultType) echo "selected"; ?>><?php echo $TypeName; ?></option>
     <?php endforeach ?>
     </select>
-<!--start day-->
+
     <label for="viz_startdate"><?php echo lang('leaves_create_field_start');?></label>
     <input type="text" name="viz_startdate" id="viz_startdate" value="<?php echo set_value('startdate'); ?>" autocomplete="off" />
     <input type="hidden" name="startdate" id="startdate" />
@@ -36,7 +36,7 @@ echo form_open('leaves/create', $attributes) ?>
         <option value="Morning" selected><?php echo lang('Morning');?></option>
         <option value="Afternoon"><?php echo lang('Afternoon');?></option>
     </select><br />
-<!--end date-->
+
     <label for="viz_enddate"><?php echo lang('leaves_create_field_end');?></label>
     <input type="text" name="viz_enddate" id="viz_enddate" value="<?php echo set_value('enddate'); ?>" autocomplete="off" />
     <input type="hidden" name="enddate" id="enddate" />
@@ -44,7 +44,7 @@ echo form_open('leaves/create', $attributes) ?>
         <option value="Morning"><?php echo lang('Morning');?></option>
         <option value="Afternoon" selected><?php echo lang('Afternoon');?></option>
     </select><br />
-    <!--duration is calculated and added to the field the -->
+
     <label for="duration"><?php echo lang('leaves_create_field_duration');?> <span id="tooltipDayOff"></span></label>
     <?php if ($this->config->item('disable_edit_leave_duration') == TRUE) { ?>
     <input type="text" name="duration" id="duration" value="<?php echo set_value('duration'); ?>" readonly />
@@ -58,6 +58,7 @@ echo form_open('leaves/create', $attributes) ?>
         <button type="button" class="close">&times;</button>
         <?php echo lang('leaves_create_field_duration_message');?>
     </div>
+
     <div class="alert hide alert-error" id="lblOverlappingAlert" onclick="$('#lblOverlappingAlert').hide();">
         <button type="button" class="close">&times;</button>
         <?php echo lang('leaves_create_field_overlapping_message');?>
@@ -72,10 +73,12 @@ echo form_open('leaves/create', $attributes) ?>
     <textarea name="cause"><?php echo set_value('cause'); ?></textarea>
 
     <br/><br/>
-    <button name="status" value="1" type="submit" id="plannedBtn" class="btn btn-primary"  ><i class="mdi mdi-calendar-question" aria-hidden="true"></i>&nbsp; <?php echo lang('Planned');?></button>
+    <button name="status" value="1" type="submit" id="plannedBtn" class="btn btn-primary"  >
+        <i class="mdi mdi-calendar-question" aria-hidden="true"></i>
+        &nbsp; <?php echo lang('Planned');?>
+    </button>
     &nbsp;&nbsp;
-    <button name="status" value="2" type="submit" id="requestBtn"  class="btn btn-primary " 
-    ><i class="mdi mdi-check"></i>&nbsp; <?php echo lang('Requested');?></button>
+    <button name="status" value="2" type="submit" id="requestBtn" class="btn btn-primary "><i class="mdi mdi-check"></i>&nbsp; <?php echo lang('Requested');?></button>
     <br/><br/>
     <a href="<?php echo base_url(); ?>leaves" class="btn btn-danger"><i class="mdi mdi-close"></i>&nbsp; <?php echo lang('leaves_create_button_cancel');?></a>
 </form>
@@ -106,8 +109,6 @@ $(document).on("click", "#showNoneWorkedDay", function(e) {
   showListDayOffHTML();
 });
 </script>
-<script type="text/javascript" src="<?php echo base_url();?>assets/js/lms/leave.edit-0.7.0.js" type="text/javascript"></script>
-
 <script type="text/javascript">
     var baseURL = '<?php echo base_url();?>';
     var userId = <?php echo $user_id; ?>;
@@ -184,3 +185,4 @@ $(function () {
 });
 <?php }?>
 </script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/lms/leave.edit-0.7.0.js" type="text/javascript"></script>

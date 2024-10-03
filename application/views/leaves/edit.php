@@ -109,7 +109,9 @@ if (isset($_GET['source'])) {
     <br />
 
     <?php if ($is_hr) {?>
-    <button type="submit" id="updateBtn" class="btn btn-primary"><i class="mdi mdi-check"></i>&nbsp;<?php echo lang('leaves_edit_button_update');?></button>&nbsp;
+    <button type="submit" id="updateBtn" class="btn btn-primary">
+        <i class="mdi mdi-check"></i>&nbsp;<?php echo lang('leaves_edit_button_update');?>
+    </button>&nbsp;
     <?php } ?>
 
     <?php if (isset($_GET['source'])) {?>
